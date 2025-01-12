@@ -5,27 +5,33 @@ import com.enviro.assessment.grad001.ndamulelomulaudzi.repository.DisposalGuidel
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DisposalGuidelineService {
     private final DisposalGuidelineRepository repository;
 
+    // Injecting the repository into the service.
     public DisposalGuidelineService(DisposalGuidelineRepository repository) {
         this.repository = repository;
     }
 
+    // Fetch all disposal guidelines from the database.
     public List<DisposalGuideline> getAllGuidelines() {
         return repository.findAll();
     }
 
-    public DisposalGuideline getGuidelineById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Guideline not found"));
+    // Fetch a specific guideline by ID
+    public Optional<DisposalGuideline> getGuidelineById(Long id) {
+        return repository.findById(id);
     }
 
+    // Save a guideline or update an existing one.
     public DisposalGuideline saveGuideline(DisposalGuideline guideline) {
         return repository.save(guideline);
     }
 
+    // Delete a guideline by ID
     public void deleteGuideline(Long id) {
         repository.deleteById(id);
     }
