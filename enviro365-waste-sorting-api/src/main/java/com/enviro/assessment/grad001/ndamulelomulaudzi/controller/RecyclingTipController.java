@@ -21,21 +21,38 @@ public class RecyclingTipController {
 
     // Endpoint to retrieve all Recycling Tips from the database.
     @GetMapping
-    public List<RecyclingTip> getAllTips() {
-        return service.getAllTips();
+    public ResponseEntity<Object> getAllTips() {
+        try {
+            List<RecyclingTip> tips = service.getAllTips();
+            if (tips.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body("No recycling tips found");
+            }
+            return ResponseEntity.ok(tips);
+        } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("An error occurred while retrieving the recycling tips: " + e.getMessage());
+    }
     }
 
     // Endpoint to retrieve a specific tip by its ID.
     @GetMapping("/{id}")
     public ResponseEntity<Object> getTipById(@PathVariable Long id) {
-        Optional<RecyclingTip> tip = service.getTipById(id);
-        if (tip.isEmpty()) {
-            // Return a custom message with 404 Not Found
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Recycling tip with ID " + id + " not found");
+        try {
+            Optional<RecyclingTip> tip = service.getTipById(id);
+            if (tip.isEmpty()) {
+                // Return a custom message with 404 Not Found
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Recycling tip with ID " + id + " not found");
+            }
+            return ResponseEntity.ok(tip.get());
+        } catch (Exception e) {
+            // Handle unexpected errors and return 500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while retrieving the recycling tip: " + e.getMessage());
         }
-        return ResponseEntity.ok(tip.get());
     }
+
 
 
     // Endpoint to create a new tip.
@@ -55,30 +72,44 @@ public class RecyclingTipController {
     // Endpoint to update a specific existing tip by its ID
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateTip(@PathVariable Long id, @Valid @RequestBody RecyclingTip tip) {
-        Optional<RecyclingTip> existingTip = service.getTipById(id);
-        if (existingTip.isEmpty()) {
-            // Return a custom message with 404 Not Found if the guideline doesn't exist
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Recycling tip with ID " + id + " not found");
-        }
+        try {
+            Optional<RecyclingTip> existingTip = service.getTipById(id);
+            if (existingTip.isEmpty()) {
+                // Return a custom message with 404 Not Found if the tip doesn't exist
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Recycling tip with ID " + id + " not found");
+            }
 
-        tip.setId(id);
-        RecyclingTip updatedTip = service.saveTip(tip);
-        return ResponseEntity.ok(updatedTip);
+            tip.setId(id);
+            RecyclingTip updatedTip = service.saveTip(tip);
+            return ResponseEntity.ok(updatedTip);
+        } catch (Exception e) {
+            // Handle unexpected errors and return 500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while updating the recycling tip: " + e.getMessage());
+        }
     }
+
 
     // Endpoint to delete a tip by its ID.
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteTip(@PathVariable Long id) {
-        Optional<RecyclingTip> existingTip = service.getTipById(id);
-        if (existingTip.isEmpty()) {
-            // Return a custom message with 404 Not Found if the guideline doesn't exist
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Recycling tip with ID " + id + " not found");
-        }
+        try {
+            Optional<RecyclingTip> existingTip = service.getTipById(id);
+            if (existingTip.isEmpty()) {
+                // Return a custom message with 404 Not Found if the tip doesn't exist
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Recycling tip with ID " + id + " not found");
+            }
 
-        service.deleteTip(id);
-        return ResponseEntity.noContent().build();
+            service.deleteTip(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            // Handle unexpected errors and return 500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while deleting the recycling tip: " + e.getMessage());
+        }
     }
+
 
 }

@@ -21,21 +21,39 @@ public class DisposalGuidelineController {
 
     // Endpoint to retrieve all disposal guidelines from the database.
     @GetMapping
-    public List<DisposalGuideline> getAllGuidelines() {
-        return service.getAllGuidelines();
+    public ResponseEntity<Object> getAllGuidelines() {
+        try {
+            List<DisposalGuideline> guidelines = service.getAllGuidelines();
+            if (guidelines.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body("No disposal guidelines found");
+            }
+            return ResponseEntity.ok(guidelines);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while retrieving the disposal guidelines: " + e.getMessage());
+        }
     }
+
 
     // Endpoint to retrieve a specific guideline by its ID.
     @GetMapping("/{id}")
     public ResponseEntity<Object> getGuidelineById(@PathVariable Long id) {
-        Optional<DisposalGuideline> guideline = service.getGuidelineById(id);
-        if (guideline.isEmpty()) {
-            // Return a custom message with 404 Not Found
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Guideline with ID " + id + " not found");
+        try {
+            Optional<DisposalGuideline> guideline = service.getGuidelineById(id);
+            if (guideline.isEmpty()) {
+                // Return a custom message with 404 Not Found
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Guideline with ID " + id + " not found");
+            }
+            return ResponseEntity.ok(guideline);
+        } catch (Exception e) {
+            // Return 500 Internal Server Error if something goes wrong
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while retrieving the guideline: " + e.getMessage());
         }
-        return ResponseEntity.ok(guideline);
     }
+
 
 
 
@@ -56,28 +74,43 @@ public class DisposalGuidelineController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateGuideline(
             @PathVariable Long id, @Valid @RequestBody DisposalGuideline guideline) {
-        Optional<DisposalGuideline> existingGuideline = service.getGuidelineById(id);
-        if (existingGuideline.isEmpty()) {
-            // Return a custom message with 404 Not Found if the guideline doesn't exist
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Guideline with ID " + id + " not found");
-        }
-        guideline.setId(id);
-        DisposalGuideline updatedGuideline = service.saveGuideline(guideline);
+        try {
+            Optional<DisposalGuideline> existingGuideline = service.getGuidelineById(id);
+            if (existingGuideline.isEmpty()) {
+                // Return a custom message with 404 Not Found if the guideline doesn't exist
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Guideline with ID " + id + " not found");
+            }
 
-        return ResponseEntity.ok(updatedGuideline);
+            guideline.setId(id);
+            DisposalGuideline updatedGuideline = service.saveGuideline(guideline);
+            return ResponseEntity.ok(updatedGuideline);
+        } catch (Exception e) {
+            // Handle unexpected errors and return 500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while updating the guideline: " + e.getMessage());
+        }
     }
 
 
     // Endpoint to delete a guideline by its ID.
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteGuideline(@PathVariable Long id) {
-        Optional<DisposalGuideline> existingGuideline = service.getGuidelineById(id);
-        if (existingGuideline.isEmpty()) {
-            // Return a custom message with 404 Not Found if the guideline doesn't exist
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Guideline with ID " + id + " not found");
+        try {
+            Optional<DisposalGuideline> existingGuideline = service.getGuidelineById(id);
+            if (existingGuideline.isEmpty()) {
+                // Return a custom message with 404 Not Found if the guideline doesn't exist
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Guideline with ID " + id + " not found");
+            }
+
+            service.deleteGuideline(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            // Handle unexpected errors and return 500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while deleting the guideline: " + e.getMessage());
         }
-        service.deleteGuideline(id);
-        return ResponseEntity.noContent().build();
     }
+
 }
