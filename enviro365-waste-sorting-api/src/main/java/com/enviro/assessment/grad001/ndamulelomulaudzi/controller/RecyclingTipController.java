@@ -103,7 +103,7 @@ public class RecyclingTipController {
             }
 
             service.deleteTip(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.OK).body("Recycling tip with ID " + id + " deleted successfully");
         } catch (Exception e) {
             // Handle unexpected errors and return 500 Internal Server Error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

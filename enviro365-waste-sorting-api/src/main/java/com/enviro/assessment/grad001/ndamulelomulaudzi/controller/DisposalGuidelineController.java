@@ -57,7 +57,7 @@ public class DisposalGuidelineController {
 
 
 
-    // Endpoint to create a new guideline.
+    // Endpoint to create a new guideline with.
     @PostMapping
     public ResponseEntity<Object> createGuideline(@Valid @RequestBody DisposalGuideline guideline) {
         try {
@@ -105,7 +105,7 @@ public class DisposalGuidelineController {
             }
 
             service.deleteGuideline(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.OK).body("Guideline with ID " + id + " deleted successfully");
         } catch (Exception e) {
             // Handle unexpected errors and return 500 Internal Server Error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

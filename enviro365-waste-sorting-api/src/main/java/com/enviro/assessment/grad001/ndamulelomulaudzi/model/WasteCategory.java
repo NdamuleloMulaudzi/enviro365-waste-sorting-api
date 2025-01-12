@@ -15,6 +15,18 @@ public class WasteCategory {
     @NotBlank(message = "Description is mandatory")
     private String description;
 
+    // Method to trim spaces before saving or updating
+    @PrePersist
+    @PreUpdate
+    private void trimFields() {
+        if (name != null) {
+            name = name.trim();
+        }
+        if (description != null) {
+            description = description.trim();
+        }
+    }
+
     // Setters
     public void setName(String name) {
         this.name = name;

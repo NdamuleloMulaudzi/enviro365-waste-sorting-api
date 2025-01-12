@@ -15,6 +15,19 @@ public class RecyclingTip {
     @NotBlank(message = "Tip content is mandatory")
     private String content;
 
+    // Method to trim spaces before saving or updating
+    @PrePersist
+    @PreUpdate
+    private void trimFields() {
+        if (title != null) {
+            title = title.trim();
+        }
+        if (content != null) {
+            content = content.trim();
+        }
+    }
+
+
     //Setters
     public void setId(Long id) {
         this.id = id;

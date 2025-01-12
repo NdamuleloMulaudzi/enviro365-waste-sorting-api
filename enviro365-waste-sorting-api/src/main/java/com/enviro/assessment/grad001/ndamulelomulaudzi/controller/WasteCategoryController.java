@@ -39,6 +39,7 @@ public class WasteCategoryController {
 
 
     // Endpoint to retrieve a specific category by its ID.
+    @GetMapping("/{id}")
     public ResponseEntity<Object> getCategoryById(@PathVariable Long id) {
         try {
             Optional<WasteCategory> category = service.getCategoryById(id);
@@ -107,7 +108,7 @@ public class WasteCategoryController {
             }
 
             service.deleteCategory(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.status(HttpStatus.OK).body("Waste category with ID " + id + " deleted successfully");
         } catch (Exception e) {
             // Handle unexpected errors and return 500 Internal Server Error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

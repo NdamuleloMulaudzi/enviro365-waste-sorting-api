@@ -15,6 +15,18 @@ public class DisposalGuideline {
     @NotBlank(message = "Guideline is mandatory")
     private String guideline;
 
+    // Method to trim spaces before saving or updating
+    @PrePersist
+    @PreUpdate
+    private void trimFields() {
+        if (wasteType != null) {
+            wasteType = wasteType.trim();
+        }
+        if (guideline != null) {
+            guideline = guideline.trim();
+        }
+    }
+
     //Setters
     public void setId(Long id) {
         this.id = id;
