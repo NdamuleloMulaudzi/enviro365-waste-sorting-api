@@ -1,7 +1,7 @@
 package com.enviro.assessment.grad001.ndamulelomulaudzi.controller;
 
 import com.enviro.assessment.grad001.ndamulelomulaudzi.model.DisposalGuideline;
-import com.enviro.assessment.grad001.ndamulelomulaudzi.service.DisposalGuidelineService;
+import com.enviro.assessment.grad001.ndamulelomulaudzi.service.DisposalGuidelineServiceImp;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +13,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/disposal-guidelines")
 public class DisposalGuidelineController {
-    private final DisposalGuidelineService service;
+    private final DisposalGuidelineServiceImp service;
 
-    public DisposalGuidelineController(DisposalGuidelineService service) {
+    public DisposalGuidelineController(DisposalGuidelineServiceImp service) {
         this.service = service;
     }
 

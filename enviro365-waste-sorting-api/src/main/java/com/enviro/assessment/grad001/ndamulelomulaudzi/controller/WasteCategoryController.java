@@ -1,7 +1,7 @@
 package com.enviro.assessment.grad001.ndamulelomulaudzi.controller;
 
 import com.enviro.assessment.grad001.ndamulelomulaudzi.model.WasteCategory;
-import com.enviro.assessment.grad001.ndamulelomulaudzi.service.WasteCategoryService;
+import com.enviro.assessment.grad001.ndamulelomulaudzi.service.WasteCategoryServiceimp;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +13,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/waste-categories")
 public class WasteCategoryController {
-    private final WasteCategoryService service;
+    private final WasteCategoryServiceimp service;
 
-    public WasteCategoryController(WasteCategoryService service) {
+    public WasteCategoryController(WasteCategoryServiceimp service) {
         this.service = service;
     }
 

@@ -1,7 +1,7 @@
 package com.enviro.assessment.grad001.ndamulelomulaudzi.controller;
 
 import com.enviro.assessment.grad001.ndamulelomulaudzi.model.RecyclingTip;
-import com.enviro.assessment.grad001.ndamulelomulaudzi.service.RecyclingTipService;
+import com.enviro.assessment.grad001.ndamulelomulaudzi.service.RecyclingTipServiceImp;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +13,9 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/recycling-tips")
 public class RecyclingTipController {
-    private final RecyclingTipService service;
+    private final RecyclingTipServiceImp service;
 
-    public RecyclingTipController(RecyclingTipService service) {
+    public RecyclingTipController(RecyclingTipServiceImp service) {
         this.service = service;
     }
 
