@@ -38,8 +38,11 @@ src/main/java/com/enviro/assessment/grad001/ndamulelomulaudzi/
     │   └── RecyclingTipRepository.java
     ├── service/                         #logic layer
     │   ├── WasteCategoryService.java
+    |   ├── WasteCategoryServiceImp.java
     │   ├── DisposalGuidelineService.java
-    │   └── RecyclingTipService.java
+    |   ├── DisposalGuidelineServiceImp.java
+    |   ├── RecyclingTipService.java
+    |   └── RecyclingTipServiceImp.java
 ```
 
 ## Setup Instructions
